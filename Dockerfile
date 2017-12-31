@@ -25,6 +25,7 @@ RUN curl -sLo user_ldap.tar.gz ${LDAP_TARBALL} && \
 
 #RUN chown -R www-data:www-data /var/www/owncloud 
 
+
 LABEL \
   org.label-schema.version=$VERSION \
   org.label-schema.build-date=$BUILD_DATE \
@@ -33,3 +34,4 @@ LABEL \
   org.label-schema.name="ownCloud Server" \
   org.label-schema.vendor="ownCloud GmbH" \
   org.label-schema.schema-version="1.0"
+
