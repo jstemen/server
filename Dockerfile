@@ -1,4 +1,4 @@
-FROM owncloud/base:latest
+FROM jstemen/arm32v7-base:latest
 MAINTAINER ownCloud DevOps <devops@owncloud.com>
 
 ARG VERSION
@@ -9,7 +9,12 @@ ARG OWNCLOUD_TARBALL
 ARG LDAP_TARBALL
 ARG LDAP_CHECKSUM
 
-RUN curl -sLo - ${OWNCLOUD_TARBALL} | tar xfj - -C /var/www/
+RUN apt-get update && apt-get install acl
+
+#RUN mkdir /var/www/owncloud
+RUN setfacl -d -m group:www-data:wrx /var/www/owncloud && setfacl -d -m user:www-data:wrx /var/www/owncloud
+
+RUN curl -sLo - ${OWNCLOUD_TARBALL} | tar xfj - --strip 1 -C /var/www/owncloud
 #ADD owncloud-${VERSION}.tar.bz2 /var/www/
 
 RUN curl -sLo user_ldap.tar.gz ${LDAP_TARBALL} && \
@@ -18,7 +23,7 @@ RUN curl -sLo user_ldap.tar.gz ${LDAP_TARBALL} && \
   tar xfz user_ldap.tar.gz -C /var/www/owncloud/apps/user_ldap --strip-components 1 && \
   rm -f user_ldap.tar.gz
 
-RUN find /var/www/owncloud \( \! -user www-data -o \! -group www-data \) -print0 | xargs -r -0 chown www-data:www-data
+#RUN chown -R www-data:www-data /var/www/owncloud 
 
 LABEL \
   org.label-schema.version=$VERSION \
