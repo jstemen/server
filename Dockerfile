@@ -9,10 +9,6 @@ ARG OWNCLOUD_TARBALL
 ARG LDAP_TARBALL
 ARG LDAP_CHECKSUM
 
-RUN apt-get update && apt-get install acl
-
-#RUN mkdir /var/www/owncloud
-RUN setfacl -d -m group:www-data:wrx /var/www/owncloud && setfacl -d -m user:www-data:wrx /var/www/owncloud
 
 RUN curl -sLo - ${OWNCLOUD_TARBALL} | tar xfj - --strip 1 -C /var/www/owncloud
 #ADD owncloud-${VERSION}.tar.bz2 /var/www/
@@ -23,7 +19,7 @@ RUN curl -sLo user_ldap.tar.gz ${LDAP_TARBALL} && \
   tar xfz user_ldap.tar.gz -C /var/www/owncloud/apps/user_ldap --strip-components 1 && \
   rm -f user_ldap.tar.gz
 
-#RUN chown -R www-data:www-data /var/www/owncloud 
+RUN chown -R www-data:www-data /var/www/owncloud 
 
 
 LABEL \
